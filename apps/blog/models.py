@@ -3,9 +3,10 @@ import uuid
 from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.urls import reverse
 from django.utils import timezone
-from taggit.managers import TaggableManager
+from django.utils.text import slugify
+
+from apps.utils.custome_models import ListField
 
 User = get_user_model()
 
@@ -22,7 +23,7 @@ class Post(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=250)
-    slug = models.SlugField(unique_for_date="publish")
+    slug = models.SlugField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts")
     body = RichTextField()
     publish = models.DateTimeField(default=timezone.now)
@@ -30,7 +31,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     published = PublishedManager()
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.PUBLISHED)
-    tags = TaggableManager()
+    tags = ListField()
 
     class Meta:
         ordering = ("-publish",)
@@ -38,11 +39,12 @@ class Post(models.Model):
             models.Index(fields=["slug", "publish"]),
         ]
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
-
-    def get_absolute_url(self):
-        return reverse("blog:post_detail", args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
 
 
 class Comment(models.Model):
