@@ -1,8 +1,25 @@
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.timesince import timesince
 from rest_framework import serializers
 
 from apps.blog.models import Comment, Post
+
+User = get_user_model()
+
+
+class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "full_name",
+        ]
+
+    def get_full_name(self, obj):
+        return obj.first_name + " " + obj.last_name
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
@@ -44,6 +61,8 @@ class CommentDeleteSerializer(serializers.ModelSerializer):
 
 
 class CommentRetrieveSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Comment
         fields = [
@@ -55,6 +74,7 @@ class CommentRetrieveSerializer(serializers.ModelSerializer):
 
 class CommentListSerializer(serializers.ModelSerializer):
     time_stamp = serializers.SerializerMethodField()
+    user = UserSerializer()
 
     class Meta:
         model = Comment
@@ -112,6 +132,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
 class PostListSerializer(serializers.ModelSerializer):
     time_stamp = serializers.SerializerMethodField()
     comments_post = CommentListSerializer(many=True, read_only=True)
+    author = UserSerializer()
 
     class Meta:
         model = Post
@@ -155,6 +176,7 @@ class PostDeleteSerializer(serializers.ModelSerializer):
 class PostRetrieveSerializer(serializers.ModelSerializer):
     time_stamp = serializers.SerializerMethodField()
     comments_post = CommentListSerializer(many=True, read_only=True)
+    author = UserSerializer()
 
     class Meta:
         model = Post
