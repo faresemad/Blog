@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.blog.models import Comment, Post
+from apps.blog.models import Comment, Post, Reply
 
 
 @admin.register(Post)
@@ -19,3 +19,10 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ["user", "post", "created_at", "active"]
     list_filter = ["active", "created_at", "updated_at"]
     search_fields = ["user", "comment"]
+
+
+@admin.register(Reply)
+class ReplyAdmin(admin.ModelAdmin):
+    list_display = ["user", "comment", "created_at", "active"]
+    list_filter = ["active", "created_at", "updated_at"]
+    search_fields = ["user", "reply"]

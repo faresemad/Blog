@@ -65,7 +65,7 @@ class Comment(models.Model):
 class Reply(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="replies_comment")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="replies_user")
-    reply = RichTextField()
+    reply = models.TextField(default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
