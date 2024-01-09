@@ -5,11 +5,11 @@ from apps.blog.models import Comment, Post, Reply
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["title", "author", "publish", "status"]
-    list_filter = ["status", "created_at", "publish", "author"]
+    list_display = ["title", "user", "publish", "status"]
+    list_filter = ["status", "created_at", "publish", "user"]
     search_fields = ["title", "body"]
     prepopulated_fields = {"slug": ("publish",)}
-    raw_id_fields = ["author"]
+    raw_id_fields = ["user"]
     date_hierarchy = "publish"
     ordering = ["status", "publish"]
 

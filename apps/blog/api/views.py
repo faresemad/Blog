@@ -1,4 +1,5 @@
 from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from apps.blog.api.serializers import (
@@ -18,6 +19,7 @@ from apps.blog.api.serializers import (
     ReplyUpdateSerializer,
 )
 from apps.blog.models import Comment, Post, Reply
+from apps.utils.permissions import IsOwnerOrReadOnly
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -34,8 +36,17 @@ class PostViewSet(viewsets.ModelViewSet):
             return PostRetrieveSerializer
         return PostListSerializer
 
+    def get_permissions(self):
+        if self.action == "list" or self.action == "retrieve":
+            permission_classes = []
+        elif self.action == "update" or self.action == "partial_update" or self.action == "destroy":
+            permission_classes = [IsOwnerOrReadOnly]
+        else:
+            permission_classes = [IsAuthenticatedOrReadOnly]
+        return [permission() for permission in permission_classes]
+
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -55,6 +66,15 @@ class CommentViewSet(viewsets.ModelViewSet):
         elif self.action == "update" or self.action == "partial_update":
             return CommentUpdateSerializer
         return CommentListSerializer
+
+    def get_permissions(self):
+        if self.action == "list" or self.action == "retrieve":
+            permission_classes = []
+        elif self.action == "update" or self.action == "partial_update" or self.action == "destroy":
+            permission_classes = [IsOwnerOrReadOnly]
+        else:
+            permission_classes = [IsAuthenticatedOrReadOnly]
+        return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -85,6 +105,15 @@ class ReplyViewSet(viewsets.ModelViewSet):
         elif self.action == "update" or self.action == "partial_update":
             return ReplyUpdateSerializer
         return ReplyListSerializer
+
+    def get_permissions(self):
+        if self.action == "list" or self.action == "retrieve":
+            permission_classes = []
+        elif self.action == "update" or self.action == "partial_update" or self.action == "destroy":
+            permission_classes = [IsOwnerOrReadOnly]
+        else:
+            permission_classes = [IsAuthenticatedOrReadOnly]
+        return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

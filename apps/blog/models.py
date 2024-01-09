@@ -24,7 +24,7 @@ class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=250)
     slug = models.SlugField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts")
     body = RichTextField()
     publish = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)

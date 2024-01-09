@@ -56,7 +56,7 @@ class ReplyDeleteSerializer(serializers.ModelSerializer):
         except Reply.DoesNotExist:
             raise serializers.ValidationError("Reply does not exist")
         if reply.user != self.context["request"].user:
-            raise serializers.ValidationError("You are not the author of this reply")
+            raise serializers.ValidationError("You are not the user of this reply")
         return attrs
 
 
@@ -138,7 +138,7 @@ class CommentDeleteSerializer(serializers.ModelSerializer):
         except Comment.DoesNotExist:
             raise serializers.ValidationError("Comment does not exist")
         if comment.user != self.context["request"].user:
-            raise serializers.ValidationError("You are not the author of this comment")
+            raise serializers.ValidationError("You are not the user of this comment")
         return attrs
 
 
@@ -199,14 +199,14 @@ class CommentUpdateSerializer(serializers.ModelSerializer):
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
-    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Post
         fields = [
             "title",
             "body",
-            "author",
+            "user",
             "publish",
             "status",
             "tags",
@@ -215,7 +215,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
 class PostListSerializer(serializers.ModelSerializer):
     time_stamp = serializers.SerializerMethodField()
-    author = UserSerializer()
+    user = UserSerializer()
 
     class Meta:
         model = Post
@@ -224,7 +224,7 @@ class PostListSerializer(serializers.ModelSerializer):
             "slug",
             "title",
             "time_stamp",
-            "author",
+            "user",
             "body",
             "status",
             "tags",
@@ -250,15 +250,15 @@ class PostDeleteSerializer(serializers.ModelSerializer):
             post = Post.objects.get(id=post_id)
         except Post.DoesNotExist:
             raise serializers.ValidationError("Post does not exist")
-        if post.author != self.context["request"].user:
-            raise serializers.ValidationError("You are not the author of this post")
+        if post.user != self.context["request"].user:
+            raise serializers.ValidationError("You are not the user of this post")
         return attrs
 
 
 class PostRetrieveSerializer(serializers.ModelSerializer):
     time_stamp = serializers.SerializerMethodField()
     comments_post = CommentListSerializer(many=True, read_only=True)
-    author = UserSerializer()
+    user = UserSerializer()
 
     class Meta:
         model = Post
@@ -268,7 +268,7 @@ class PostRetrieveSerializer(serializers.ModelSerializer):
             "title",
             "publish",
             "time_stamp",
-            "author",
+            "user",
             "body",
             "status",
             "tags",
