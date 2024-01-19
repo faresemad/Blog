@@ -4,6 +4,7 @@ from django.utils.timesince import timesince
 from rest_framework import serializers
 
 from apps.blog.models import Comment, Post, Reply
+from apps.profiles.models import LikedPost, SavedPost
 
 User = get_user_model()
 
@@ -214,6 +215,8 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
 
 class PostListSerializer(serializers.ModelSerializer):
+    is_liked = serializers.SerializerMethodField()
+    is_saved = serializers.SerializerMethodField()
     time_stamp = serializers.SerializerMethodField()
     user = UserSerializer()
 
@@ -228,6 +231,8 @@ class PostListSerializer(serializers.ModelSerializer):
             "body",
             "status",
             "tags",
+            "is_liked",
+            "is_saved",
         ]
 
     def get_time_stamp(self, obj):
@@ -235,6 +240,20 @@ class PostListSerializer(serializers.ModelSerializer):
         todat = timezone.now()
         time_delta = timesince(publish_date, todat)
         return time_delta
+
+    def get_is_liked(self, obj):
+        user = self.context["request"].user
+        if user.is_authenticated:
+            if LikedPost.objects.filter(user=user, post=obj).exists():
+                return True
+        return False
+
+    def get_is_saved(self, obj):
+        user = self.context["request"].user
+        if user.is_authenticated:
+            if SavedPost.objects.filter(user=user, post=obj).exists():
+                return True
+        return False
 
 
 class PostDeleteSerializer(serializers.ModelSerializer):
@@ -256,6 +275,8 @@ class PostDeleteSerializer(serializers.ModelSerializer):
 
 
 class PostRetrieveSerializer(serializers.ModelSerializer):
+    is_liked = serializers.SerializerMethodField()
+    is_saved = serializers.SerializerMethodField()
     time_stamp = serializers.SerializerMethodField()
     comments_post = CommentListSerializer(many=True, read_only=True)
     user = UserSerializer()
@@ -273,6 +294,8 @@ class PostRetrieveSerializer(serializers.ModelSerializer):
             "status",
             "tags",
             "comments_post",
+            "is_liked",
+            "is_saved",
         ]
 
     def get_time_stamp(self, obj):
@@ -280,3 +303,17 @@ class PostRetrieveSerializer(serializers.ModelSerializer):
         todat = timezone.now()
         time_delta = timesince(publish_date, todat)
         return time_delta
+
+    def get_is_liked(self, obj):
+        user = self.context["request"].user
+        if user.is_authenticated:
+            if LikedPost.objects.filter(user=user, post=obj).exists():
+                return True
+        return False
+
+    def get_is_saved(self, obj):
+        user = self.context["request"].user
+        if user.is_authenticated:
+            if SavedPost.objects.filter(user=user, post=obj).exists():
+                return True
+        return False
