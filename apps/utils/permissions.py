@@ -20,3 +20,10 @@ class IsOwnerOrReadOnly(IsAuthenticated):
             return True
         # Write permissions are only allowed to the owner of the snippet.
         return obj.user == request.user
+
+
+class IsOwner(IsAuthenticated):
+    def has_object_permission(self, request, view, obj):
+        if isinstance(request.user, AnonymousUser):
+            return False
+        return obj.user == request.user

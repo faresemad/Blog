@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from rest_framework.response import Response
 
 from apps.blog.models import Post
 
@@ -21,7 +22,7 @@ class LikedPost(models.Model):
 
     def save(self, *args, **kwargs):
         if self.user == self.post.user:
-            raise ValueError("You cannot like your own post")
+            return Response({"detail": "You cannot like your own post"})
         super().save(*args, **kwargs)
 
 
@@ -40,5 +41,5 @@ class SavedPost(models.Model):
 
     def save(self, *args, **kwargs):
         if self.user == self.post.user:
-            raise ValueError("You cannot save your own post")
+            return Response({"detail": "You cannot save your own post"})
         super().save(*args, **kwargs)
