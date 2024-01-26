@@ -1,0 +1,14 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+# Email
+
+# DJANGO_EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+# DJANGO_EMAIL_HOST=smtppro.zoho.com
+# DJANGO_EMAIL_PORT=465
+# DJANGO_EMAIL_HOST_USER=backend.services@softtalents.com
+# DJANGO_DEFAULT_FROM_EMAIL=backend.services@softtalents.com
+# DJANGO_EMAIL_HOST_PASSWORD=Iabo&Fm96W8!HLld
+
+MODE=DEVELOPMENT
