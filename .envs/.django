@@ -12,3 +12,7 @@ IPYTHONDIR=/app/.ipython
 # DJANGO_EMAIL_HOST_PASSWORD=Iabo&Fm96W8!HLld
 
 MODE=DEVELOPMENT
+
+SECRET_KEY=django-insecure-%21w11+m8vi-_2bv1rqsyjgid*hk=8aoy4_^ygj_q@f-847^ym
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,0.0.0.0,localhost

@@ -4,11 +4,12 @@ import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-SECRET_KEY = "django-insecure-%21w11+m8vi-_2bv1rqsyjgid*hk=8aoy4_^ygj_q@f-847^ym"
 
-DEBUG = True
+SECRET_KEY = env.str("SECRET_KEY")
 
-ALLOWED_HOSTS = []
+DEBUG = env.bool("DEBUG")
+
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 
 DJANGO_APPS = [
