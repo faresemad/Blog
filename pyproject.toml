@@ -1,6 +1,15 @@
+# ==== pytest ====
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--ds=config.settings.test --reuse-db"
+python_files = [
+    "tests.py",
+    "test_*.py",
+]
+
 # ==== Coverage ====
 [tool.coverage.run]
-include = ["config/**"]
+include = ["Blog/**"]
 omit = ["*/migrations/*", "*/tests/*"]
 plugins = ["django_coverage_plugin"]
 
@@ -16,10 +25,10 @@ target-version = ['py311']
 profile = "black"
 line_length = 119
 known_first_party = [
-    "config",
+    "Blog",
     "config",
 ]
-skip = ["venv/",".venv/"]
+skip = ["venv/"]
 skip_glob = ["**/migrations/*.py"]
 
 
@@ -36,6 +45,13 @@ plugins = [
     "mypy_drf_plugin.main",
 ]
 
+[[tool.mypy.overrides]]
+# Django migrations should not produce any errors:
+module = "*.migrations.*"
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings"
 
 
 # ==== PyLint ====
@@ -43,7 +59,7 @@ plugins = [
 load-plugins = [
     "pylint_django",
 ]
-django-settings-module = "config.settings.local"
+django-settings-module = "config.settings"
 
 [tool.pylint.FORMAT]
 max-line-length = 119
