@@ -1,8 +1,9 @@
-version: '3'
+version: "3"
 
 volumes:
   blog_local_postgres_data: {}
   blog_local_postgres_data_backups: {}
+  django_media: {}
 
 services:
   django:
@@ -18,8 +19,10 @@ services:
     env_file:
       - ./.envs/.django
       - ./.envs/.postgres
+    expose:
+      - 8000
     ports:
-      - '8000:8000'
+      - "8000:8000"
     command: /start
 
   postgres:
@@ -33,3 +36,17 @@ services:
       - blog_local_postgres_data_backups:/backups
     env_file:
       - ./.envs/.postgres
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/nginx/Dockerfile
+    image: django_nginx
+    container_name: django_nginx
+    restart: always
+    depends_on:
+      - django
+    ports:
+      - "80:80"
+    volumes:
+      - django_media:/usr/src/app
