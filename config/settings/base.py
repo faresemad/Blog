@@ -2,14 +2,8 @@ from pathlib import Path
 
 import environ
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env()
-
-SECRET_KEY = env.str("SECRET_KEY")
-
-DEBUG = env.bool("DEBUG")
-
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 
 DJANGO_APPS = [
@@ -70,13 +64,6 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True

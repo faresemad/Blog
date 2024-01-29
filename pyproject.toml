@@ -51,7 +51,7 @@ module = "*.migrations.*"
 ignore_errors = true
 
 [tool.django-stubs]
-django_settings_module = "config.settings"
+django_settings_module = "config.settings.local"
 
 
 # ==== PyLint ====
@@ -59,7 +59,7 @@ django_settings_module = "config.settings"
 load-plugins = [
     "pylint_django",
 ]
-django-settings-module = "config.settings"
+django-settings-module = "config.settings.local"
 
 [tool.pylint.FORMAT]
 max-line-length = 119
