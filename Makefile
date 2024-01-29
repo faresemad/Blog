@@ -7,6 +7,9 @@ upbuild:
 up:
 	docker-compose -f $(COMPOSE_FILE) up
 
+upground:
+	docker-compose -f $(COMPOSE_FILE) up -d
+
 build:
 	docker-compose -f $(COMPOSE_FILE) build
 
