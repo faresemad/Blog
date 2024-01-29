@@ -20,6 +20,7 @@ from apps.blog.api.serializers import (
 )
 from apps.blog.models import Comment, Post, Reply
 from apps.utils.permissions import IsOwnerOrReadOnly
+from apps.utils.tasks import check_depug
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -35,6 +36,10 @@ class PostViewSet(viewsets.ModelViewSet):
         elif self.action == "retrieve":
             return PostRetrieveSerializer
         return PostListSerializer
+
+    def list(self, queryset, *args, **kwargs):
+        check_depug.delay()
+        return super().list(queryset, *args, **kwargs)
 
     def get_permissions(self):
         if self.action == "list" or self.action == "retrieve":
