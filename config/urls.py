@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
@@ -13,11 +14,9 @@ sitemaps = {
 
 api_prefix = "api/"
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("api-auth/", include("rest_framework.urls")),
-    path(f"{api_prefix}blog/", include("apps.blog.api.urls")),
-    path(f"{api_prefix}feed/rss/", LatestPostsFeed(), name="latest-posts-feed"),
-    path(f"{api_prefix}profile/", include("apps.profiles.api.urls")),
+    path(settings.ADMIN_URL, admin.site.urls),
+    path(f"{api_prefix}auth/", include("djoser.urls")),
+    path(f"{api_prefix}auth/", include("djoser.urls.jwt")),
     path(
         "sitemap.xml",
         sitemap,
@@ -30,4 +29,11 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
+]
+
+# API patterns
+urlpatterns += [
+    path(f"{api_prefix}blog/", include("apps.blog.api.urls")),
+    path(f"{api_prefix}feed/rss/", LatestPostsFeed(), name="latest-posts-feed"),
+    path(f"{api_prefix}profile/", include("apps.profiles.api.urls")),
 ]
