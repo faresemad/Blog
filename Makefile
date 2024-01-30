@@ -7,7 +7,7 @@ upbuild:
 up:
 	docker-compose -f $(COMPOSE_FILE) up
 
-upground:
+up-detached:
 	docker-compose -f $(COMPOSE_FILE) up -d
 
 build:
