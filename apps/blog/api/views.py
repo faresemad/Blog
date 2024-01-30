@@ -28,7 +28,7 @@ from apps.utils.tasks import check_depug
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(status=Post.Status.PUBLISHED)
     serializer_class = PostListSerializer
     pagination_class = PostPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
