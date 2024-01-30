@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
+from apps.blog.feeds import LatestPostsFeed
 from apps.blog.sitemaps import PostSitemap
 
 sitemaps = {
@@ -14,6 +15,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
     path(f"{api_prefix}blog/", include("apps.blog.api.urls")),
+    path(f"{api_prefix}feed/rss/", LatestPostsFeed(), name="latest-posts-feed"),
     path(f"{api_prefix}profile/", include("apps.profiles.api.urls")),
     path(
         "sitemap.xml",
