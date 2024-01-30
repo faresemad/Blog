@@ -111,7 +111,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+    # "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     # "EXCEPTION_HANDLER": "apps.utils.exceptionhandler.custom_exception_handler",
@@ -136,7 +136,8 @@ Example:
         "status_code": 400,
         "exception_class": "ValidationError",
         "error_message": "Bad request."
-    }```
+    }
+```
 """
 SPECTACULAR_SETTINGS = {
     "TITLE": "Blog API",

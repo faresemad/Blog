@@ -1,6 +1,9 @@
 from rest_framework import status, viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 
+from apps.blog.api.serializers import PostDeleteSerializer, PostListSerializer, PostRetrieveSerializer
+from apps.blog.models import Post
 from apps.profiles.api.serializers import (
     LikedPostListSerializer,
     LikedPostSerializer,
@@ -9,6 +12,58 @@ from apps.profiles.api.serializers import (
 )
 from apps.profiles.models import LikedPost, SavedPost
 from apps.utils.permissions import IsOwner
+
+
+class ArchivedPostsViewSet(viewsets.ModelViewSet):
+    serializer_class = PostListSerializer
+    queryset = Post.objects.filter(status=Post.Status.ARCHIVED)
+    permission_classes = [IsOwner]
+    filter_backends = [SearchFilter]
+    search_fields = ["title", "body"]
+    http_method_names = ["get", "patch", "delete"]
+
+    def get_serializer_class(self):
+        if self.action == "destroy":
+            return PostDeleteSerializer
+        elif self.action == "retrieve":
+            return PostRetrieveSerializer
+        return PostListSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user == request.user:
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+
+class DRAFTPostsViewSet(viewsets.ModelViewSet):
+    serializer_class = PostListSerializer
+    queryset = Post.objects.filter(status=Post.Status.DRAFT)
+    permission_classes = [IsOwner]
+    filter_backends = [SearchFilter]
+    search_fields = ["title", "body"]
+    http_method_names = ["get", "patch", "delete"]
+
+    def get_serializer_class(self):
+        if self.action == "destroy":
+            return PostDeleteSerializer
+        elif self.action == "retrieve":
+            return PostRetrieveSerializer
+        return PostListSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user == request.user:
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 class LikedPostViewSet(viewsets.ModelViewSet):
