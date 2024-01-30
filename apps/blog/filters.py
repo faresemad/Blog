@@ -8,11 +8,6 @@ class PostFilter(filters.FilterSet):
         model = Post
         fields = {
             "title": ["icontains"],
-            "slug": ["icontains"],
             "user__username": ["icontains"],
-            "body": ["icontains"],
-            "publish": ["icontains"],
-            "created_at": ["icontains"],
-            "updated_at": ["icontains"],
             "status": ["exact"],
         }
