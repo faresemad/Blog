@@ -117,7 +117,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
     def create(self, *args, **kwargs):
         post_slug = self.context["view"].kwargs.get("post_slug")
-        post = Post.published.get(slug=post_slug)
+        post = Post.objects.get(slug=post_slug)
         comment = Comment.objects.create(post=post, **self.validated_data)
         return comment
 

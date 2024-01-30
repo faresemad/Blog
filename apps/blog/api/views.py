@@ -1,4 +1,6 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
@@ -18,14 +20,21 @@ from apps.blog.api.serializers import (
     ReplyRetrieveSerializer,
     ReplyUpdateSerializer,
 )
+from apps.blog.filters import PostFilter
 from apps.blog.models import Comment, Post, Reply
+from apps.utils.paginations import PostPagination
 from apps.utils.permissions import IsOwnerOrReadOnly
 from apps.utils.tasks import check_depug
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.published.all()
+    queryset = Post.objects.all()
     serializer_class = PostListSerializer
+    pagination_class = PostPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = PostFilter
+    search_fields = ["title", "body"]
+    http_method_names = ["get", "post", "patch", "delete"]
     lookup_field = "slug"
 
     def get_serializer_class(self):
@@ -56,6 +65,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentListSerializer
+    http_method_names = ["get", "post", "patch", "delete"]
     lookup_field = "id"
 
     def get_queryset(self):
@@ -94,8 +104,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class ReplyViewSet(viewsets.ModelViewSet):
     serializer_class = ReplyListSerializer
+    http_method_names = ["get", "post", "patch", "delete"]
     lookup_field = "id"
-    # allowed_methods = ["GET", "POST", "PATCH", "DELETE"]
 
     def get_queryset(self):
         return Reply.objects.filter(comment_id=self.kwargs.get("comment_id"))

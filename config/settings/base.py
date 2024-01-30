@@ -19,8 +19,11 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "rest_framework.authtoken",
     "taggit",
     "ckeditor",
+    "drf_spectacular",
+    "django_filters",
 ]
 
 LOCAL_APPS = [
@@ -106,3 +109,38 @@ STATIC_URL = "static/"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    # "EXCEPTION_HANDLER": "apps.utils.exceptionhandler.custom_exception_handler",
+}
+DESCRIPTION = """Documentation of API endpoints of nirvana
+
+Handle Error Codes:
+```json
+    400: "Bad request.",
+    401: "Unauthorized.",
+    404: "Not found.",
+    405: "Method not allowed.",
+    500: "Internal server error.",
+    200: "OK.",
+    201: "Created.",
+    202: "Accepted.",
+```
+
+Example:
+```json
+    {
+        "status_code": 400,
+        "exception_class": "ValidationError",
+        "error_message": "Bad request."
+    }```
+"""
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Blog API",
+    "DESCRIPTION": DESCRIPTION,
+    "VERSION": "1.0.0",
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
+}
