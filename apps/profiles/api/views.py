@@ -15,6 +15,7 @@ class LikedPostViewSet(viewsets.ModelViewSet):
     serializer_class = LikedPostSerializer
     queryset = LikedPost.objects.all()
     permission_classes = [IsOwner]
+    http_method_names = ["get", "post", "patch", "delete"]
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -39,6 +40,7 @@ class SavedPostViewSet(viewsets.ModelViewSet):
     serializer_class = SavedPostSerializer
     queryset = SavedPost.objects.all()
     permission_classes = [IsOwner]
+    http_method_names = ["get", "post", "patch", "delete"]
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)

@@ -11,11 +11,6 @@ from apps.utils.custome_models import ListField
 User = get_user_model()
 
 
-class PublishedManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(status=Post.Status.PUBLISHED)
-
-
 class Post(models.Model):
     class Status(models.TextChoices):
         DRAFT = "draft", "Draft"
@@ -29,7 +24,6 @@ class Post(models.Model):
     publish = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    published = PublishedManager()
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.PUBLISHED)
     tags = ListField()
 
