@@ -22,7 +22,6 @@ django-filter==23.5 # https://django-filter.readthedocs.io/en/stable/
 djoser==2.2.0 # https://djoser.readthedocs.io/en/latest/getting_started.html
 openpyxl==3.1.2 # https://pypi.org/project/openpyxl/
 pandas==2.1.4 # https://pandas.pydata.org/docs/
-django-taggit==5.0.1 # https://pypi.org/project/django-taggit/
 django-ckeditor==6.7.0 # https://django-ckeditor.readthedocs.io/en/latest/
 drf-nested-routers==0.93.4 # https://github.com/alanjds/drf-nested-routers
 celery==5.3.6 # https://github.com/celery/celery

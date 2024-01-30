@@ -20,7 +20,6 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
-    "taggit",
     "ckeditor",
     "drf_spectacular",
     "django_filters",
@@ -116,7 +115,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     # "EXCEPTION_HANDLER": "apps.utils.exceptionhandler.custom_exception_handler",
 }
-DESCRIPTION = """Documentation of API endpoints of nirvana
+DESCRIPTION = """Documentation of API endpoints of Blog
 
 Handle Error Codes:
 ```json
