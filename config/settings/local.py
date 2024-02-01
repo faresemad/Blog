@@ -26,3 +26,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT", "Bearer"),
     "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
 }
+
+# Email settings
+# ----------------------------------------------------------------
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
