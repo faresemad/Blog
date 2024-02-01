@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from celery.schedules import crontab
 
 from .base import *  # noqa
@@ -18,3 +20,13 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(minute="*/5"),
     },
 }
+
+ADMIN_URL = env.str("ADMIN_URL", default="admin/")
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("JWT", "Bearer"),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
+}
+
+# Email settings
+# ----------------------------------------------------------------
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

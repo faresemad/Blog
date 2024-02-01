@@ -21,6 +21,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "ckeditor",
+    "djoser",
     "drf_spectacular",
     "django_filters",
 ]
@@ -28,11 +29,13 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.blog",
     "apps.profiles",
+    "apps.users",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 SITE_ID = 1
 
+AUTH_USER_MODEL = "users.User"
 # CKEditor
 CKEDITOR_UPLOAD_PATH = "uploads/"  # Specify the upload path
 CKEDITOR_IMAGE_BACKEND = "pillow"  # Use the Pillow image processing library
@@ -52,7 +55,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -110,7 +113,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    # "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     # "EXCEPTION_HANDLER": "apps.utils.exceptionhandler.custom_exception_handler",
@@ -144,3 +147,28 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
 }
+
+DJOSER = {
+    "ACTIVATION_URL": "api/v1/users/activate-account/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "api/v1/users/password-reset-account/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "SET_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND": True,
+    "TOKEN_MODEL": False,
+    "serializers": {
+        "current_user": "apps.users.api.serializers.UserSerializer",
+    },
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("JWT",),
+}
+API_PREFIX = "api/v1/"
+PROTOCOL = "http"
+DOMAIN = "localhost"
+ACTIVATE_ACCOUNT_URL = "users/activation/"
+RESET_PASS_CONFIRM_URL = "users/reset_password_confirm/"
